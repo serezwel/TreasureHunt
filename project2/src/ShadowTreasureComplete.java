@@ -45,11 +45,26 @@ public class ShadowTreasureComplete extends AbstractGame {
         return treasure;
     }
 
+    public Bullet getBullet() {
+        return bullet;
+    }
+
     public Zombie getNearestZombie() {
         Zombie nearestZombie = zombie.get(0);
         for (int i=1;i<zombie.size();i++) {
             if (zombie.get(i).getPos().distanceTo(player.getPos()) < nearestZombie.getPos().distanceTo(player.getPos())
-            && zombie.get(i).isVisible()) {
+            && !zombie.get(i).getShot()) {
+                nearestZombie = zombie.get(i);
+            }
+        }
+        return nearestZombie;
+    }
+
+    public Zombie getNearestVisibleZombie() {
+        Zombie nearestZombie = zombie.get(0);
+        for (int i=1;i<zombie.size();i++) {
+            if (zombie.get(i).getPos().distanceTo(player.getPos()) < nearestZombie.getPos().distanceTo(player.getPos())
+                    && zombie.get(i).isVisible()) {
                 nearestZombie = zombie.get(i);
             }
         }
@@ -86,6 +101,7 @@ public class ShadowTreasureComplete extends AbstractGame {
                 switch (type) {
                     case "Player":
                         this.player = new Player(x, y, Integer.parseInt(parts[3]));
+                        this.bullet = new Bullet(x, y);
                         break;
                     case "Zombie":
                         zombie.add(new Zombie(x, y));
@@ -138,6 +154,9 @@ public class ShadowTreasureComplete extends AbstractGame {
             }
             treasure.draw();
             player.render();
+            if (bullet.isVisible()){
+                bullet.draw();
+            }
         }
     }
 

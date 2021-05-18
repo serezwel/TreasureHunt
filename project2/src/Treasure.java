@@ -12,6 +12,12 @@ public class Treasure {
     public void draw() {
         image.drawFromTopLeft(pos.x, pos.y);
     }
-
-
+    public boolean meets(Player player) {
+        boolean hasMet = false;
+        double distanceToPlayer = player.getPos().distanceTo(pos);
+        if (distanceToPlayer < ShadowTreasureComplete.ClOSENESS) {
+            hasMet = true;
+        }
+        return hasMet;
+    }
 }

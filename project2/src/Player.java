@@ -18,6 +18,7 @@ public class Player implements Pointable{
     // healthbar font
     private final Font FONT = new Font("res/font/DejaVuSans-Bold.ttf", 20);
     private final DrawOptions OPT = new DrawOptions();
+    private final int SHOOTING_DISTANCE = 150;
 
     // image and type
     private final Image image;
@@ -65,8 +66,7 @@ public class Player implements Pointable{
         // Check if the player meets the Zombie and if so reduce energy by 3 and
         // terminate. Otherwise if the player meets the Sandwich increase the energy
         // an set the Sandwich to invisible
-        if (tomb.getNearestZombie().meets(this)) {
-            reachZombie();
+        if (tomb.getTreasure().meets(this)) {
             tomb.setEndOfGame(true);
         } else if (tomb.getNearestSandwich().meets(this)) {
             eatSandwich();
@@ -74,15 +74,31 @@ public class Player implements Pointable{
         }
 
         // set direction
-        if (this.energy >= LOWENERGY){
-            // direction to zombie
-            pointTo(tomb.getTreasure().getPos());
-        } else{
+        if (this.energy < LOWENERGY){
             // direction to sandwich
             pointTo(tomb.getNearestSandwich().getPos());
+        } else {
+            // shoot zombie
+            if (pos.distanceTo(tomb.getNearestZombie().getPos()) >= SHOOTING_DISTANCE) {
+                pointTo(tomb.getNearestZombie().getPos());
+            } else {
+                tomb.getNearestZombie().setShot(true);
+                shootZombie();
+                tomb.getBullet().setVisible(true);
+                tomb.getBullet().pointTo(tomb.getNearestVisibleZombie().getPos());
+            }
         }
         // move one step
         this.pos = new Point(this.pos.x+STEP_SIZE*this.directionX, this.pos.y+STEP_SIZE*this.directionY);
+        if (!tomb.getBullet().isVisible()) { tomb.getBullet().setPos(this.pos); }
+        else {
+            tomb.getBullet().setPos(new Point(tomb.getBullet().getPos().x+STEP_SIZE*tomb.getBullet().getDirectionX(),
+                    tomb.getBullet().getPos().y+STEP_SIZE*tomb.getBullet().getDirectionY()));
+        }
+        if (tomb.getNearestVisibleZombie().meets(tomb.getBullet())) {
+            tomb.getNearestVisibleZombie().setVisible(false);
+            tomb.getBullet().setVisible(false);
+        }
     }
 
     // render
@@ -95,7 +111,7 @@ public class Player implements Pointable{
     public void eatSandwich(){
         energy += 5;
     }
-    public void reachZombie(){
+    public void shootZombie(){
         energy -= 3;
     }
 }

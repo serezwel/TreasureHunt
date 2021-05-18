@@ -1,7 +1,7 @@
 import bagel.Image;
 import bagel.util.Point;
 
-public class Sandwich{
+public class Sandwich extends Entity{
     // image
     private final Image image = new Image("res/images/sandwich.png");
     private boolean visible;
@@ -17,6 +17,7 @@ public class Sandwich{
     public Point getPos() {
         return pos;
     }
+
     public boolean isVisible() {
         return visible;
     }
