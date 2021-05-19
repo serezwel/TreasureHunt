@@ -63,7 +63,7 @@ public class Player implements Pointable{
         this.directionY /= len;
     }
 
-    public void update(ShadowTreasureComplete tomb){
+    public void update(ShadowTreasureComplete tomb) {
         // Check if the player meets the Zombie and if so reduce energy by 3 and
         // terminate. Otherwise if the player meets the Sandwich increase the energy
         // an set the Sandwich to invisible
@@ -74,10 +74,14 @@ public class Player implements Pointable{
             tomb.getNearestSandwich().setVisible(false);
         }
         // set direction
-        if (this.energy < LOWENERGY && tomb.getNearestSandwich() != null){
+        if (this.energy < LOWENERGY && tomb.getNearestSandwich() != null) {
             // direction to sandwich
-            pointTo(tomb.getNearestSandwich().getPos());
-        } else if (tomb.getNearestZombie() != null){
+            try {
+                pointTo(tomb.getNearestSandwich().getPos());
+            } catch (NullPointerException e) {
+                tomb.setEndOfGame(true);
+            }
+        } else if (tomb.getNearestZombie() != null) {
             //aim for nearest zombie
             pointTo(tomb.getNearestZombie().getPos());
             if (pos.distanceTo(tomb.getNearestZombie().getPos()) <= SHOOTING_DISTANCE) {
@@ -89,6 +93,8 @@ public class Player implements Pointable{
                 tomb.getBullet().setVisible(true);
                 tomb.getBullet().pointTo(tomb.getNearestZombie().getPos());
             }
+        } else if (this.energy < LOWENERGY) {
+
         } else {
             pointTo(tomb.getTreasure().getPos());
         }

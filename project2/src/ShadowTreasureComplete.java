@@ -117,6 +117,11 @@ public class ShadowTreasureComplete extends AbstractGame {
     @Override
     public void update(Input input) {
         if (this.endOfGame || input.wasPressed(Keys.ESCAPE)){
+            if (treasure.meets(player)) {
+                System.out.println(player.getEnergy() + ", success!");
+            } else {
+                System.out.println(player.getEnergy());
+            }
             Window.close();
         } else{
             // Draw background
