@@ -70,7 +70,8 @@ public class Player implements Pointable{
         if (tomb.getTreasure().meets(this)) {
             tomb.setEndOfGame(true);
         }
-        if (tomb.getNearestSandwich() == null && tomb.getNearestZombie() != null && this.energy < LOWENERGY) {
+        if (tomb.getNearestSandwich() == null && tomb.getNearestZombie() != null && this.energy < LOWENERGY
+        && !tomb.getBullet().isVisible()) {
             tomb.setEndOfGame(true);
         }
         // set direction
