@@ -8,4 +8,6 @@ public abstract class Entity {
     public abstract void setVisible(boolean visibility);
 
     public abstract void draw();
+
+    public abstract double getDistance(Player player);
 }

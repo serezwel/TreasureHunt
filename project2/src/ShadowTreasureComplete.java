@@ -3,6 +3,7 @@ import bagel.*;
 import java.io.*;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * An example Bagel game.
@@ -11,6 +12,7 @@ public class ShadowTreasureComplete extends AbstractGame {
 
     private final Image BACKGROUND = new Image("res/images/background.png");
     public static final int ClOSENESS = 50;
+    public static final int BULLET_CLOSENESS = 25;
 
     // for rounding double number
     private static DecimalFormat df = new DecimalFormat("0.00");
@@ -18,11 +20,6 @@ public class ShadowTreasureComplete extends AbstractGame {
     // tick cycle and var
     private final int TICK_CYCLE = 10;
     private int tick;
-
-    private int totalSandwich;
-    private int totalZombie;
-    private int sandwichNum = 0;
-    private int zombieNum = 0;
 
     // list of characters
     private Player player;
@@ -45,41 +42,29 @@ public class ShadowTreasureComplete extends AbstractGame {
         return treasure;
     }
 
+    public Player getPlayer() { return player; }
+
     public Bullet getBullet() {
         return bullet;
     }
 
     public Zombie getNearestZombie() {
-        Zombie nearestZombie = zombie.get(0);
-        for (int i=1;i<zombie.size();i++) {
-            if (zombie.get(i).getPos().distanceTo(player.getPos()) < nearestZombie.getPos().distanceTo(player.getPos())
-            && !zombie.get(i).getShot()) {
-                nearestZombie = zombie.get(i);
+        for (int i=0;i<zombie.size();i++) {
+            if (zombie.get(i).isVisible()) {
+                return zombie.get(i);
             }
         }
-        return nearestZombie;
+        return null;
     }
 
-    public Zombie getNearestVisibleZombie() {
-        Zombie nearestZombie = zombie.get(0);
-        for (int i=1;i<zombie.size();i++) {
-            if (zombie.get(i).getPos().distanceTo(player.getPos()) < nearestZombie.getPos().distanceTo(player.getPos())
-                    && zombie.get(i).isVisible()) {
-                nearestZombie = zombie.get(i);
-            }
-        }
-        return nearestZombie;
-    }
 
     public Sandwich getNearestSandwich() {
-        Sandwich nearestSandwich = sandwich.get(0);
-        for (int i=1;i<sandwich.size();i++) {
-            if (sandwich.get(i).getPos().distanceTo(player.getPos()) < nearestSandwich.getPos().distanceTo(player.getPos())
-            && sandwich.get(i).isVisible()) {
-                nearestSandwich = sandwich.get(i);
+        for (int i=0;i<sandwich.size();i++) {
+            if (sandwich.get(i).isVisible()) {
+                return sandwich.get(i);
             }
         }
-        return nearestSandwich;
+        return null;
     }
 
     public void setEndOfGame(boolean endOfGame) {
@@ -105,11 +90,9 @@ public class ShadowTreasureComplete extends AbstractGame {
                         break;
                     case "Zombie":
                         zombie.add(new Zombie(x, y));
-                        zombieNum += 1;
                         break;
                     case "Sandwich":
                         sandwich.add(new Sandwich(x, y));
-                        sandwichNum += 1;
                         break;
                     case "Treasure":
                         this.treasure = new Treasure(x, y);
@@ -122,6 +105,10 @@ public class ShadowTreasureComplete extends AbstractGame {
             e.printStackTrace();
             System.exit(-1);
         }
+        DistanceComparator comparator = new DistanceComparator();
+        comparator.setPlayer(player);
+        Collections.sort(zombie, comparator);
+        Collections.sort(sandwich, comparator);
     }
 
     /**

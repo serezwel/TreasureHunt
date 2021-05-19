@@ -33,12 +33,15 @@ public class Sandwich extends Entity{
         }
     }
 
+    public double getDistance(Player player) {
+        return player.getPos().distanceTo(pos);
+    }
+
     public boolean meets(Player player) {
         boolean hasMet = false;
 
         if (isVisible()){
-            double distanceToPlayer = player.getPos().distanceTo(pos);
-            if (distanceToPlayer < ShadowTreasureComplete.ClOSENESS) {
+            if (this.getDistance(player) < ShadowTreasureComplete.ClOSENESS) {
                 hasMet = true;
             }
         }

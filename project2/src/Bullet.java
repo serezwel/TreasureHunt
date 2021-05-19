@@ -12,14 +12,15 @@ public class Bullet implements Pointable{
         this.pos = new Point(x, y);
         this.visible = false;
     }
+    //bullet visibility
     public Boolean isVisible() { return visible; };
     public void setVisible(Boolean visibility) { this.visible = visibility; }
-
+    //bullet position
     public Point getPos() {
         return pos;
     }
     public void setPos(Point newPos) { this.pos = newPos; }
-
+    //similar to player's pointTo
     public void pointTo(Point dest) {
         this.directionX = dest.x-this.pos.x;
         this.directionY = dest.y-this.pos.y;

@@ -9,12 +9,12 @@ public class Zombie extends Entity{
     // render position
     private Point pos;
     private boolean visible;
-    private boolean shot;
+    private boolean isShot;
 
     public Zombie(double x, double y){
         this.pos = new Point(x,y);
         this.visible = true;
-        this.shot = false;
+        this.isShot = false;
     }
 
     public Point getPos() {
@@ -27,13 +27,15 @@ public class Zombie extends Entity{
         image.drawFromTopLeft(pos.x, pos.y);
     }
 
-    public boolean getShot() { return this.shot; }
-    public void setShot(boolean isShot) { this.shot = isShot; }
-
+    public double getDistance(Player player) {
+        return player.getPos().distanceTo(pos);
+    }
+    public boolean getIsShot() { return this.isShot; }
+    public void setShot(boolean shot) { this.isShot = shot; }
     public boolean meets(Bullet bullet) {
         boolean hasMet = false;
-        double distanceToPlayer = bullet.getPos().distanceTo(pos);
-        if (distanceToPlayer < ShadowTreasureComplete.ClOSENESS) {
+        double distanceToBullet = bullet.getPos().distanceTo(pos);
+        if (distanceToBullet < ShadowTreasureComplete.BULLET_CLOSENESS) {
             hasMet = true;
         }
         return hasMet;
