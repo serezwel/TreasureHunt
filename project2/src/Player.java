@@ -64,9 +64,7 @@ public class Player implements Pointable{
     }
 
     public void update(ShadowTreasureComplete tomb) {
-        // Check if the player meets the Zombie and if so reduce energy by 3 and
-        // terminate. Otherwise if the player meets the Sandwich increase the energy
-        // an set the Sandwich to invisible
+        //Check if player has met treasure or player has no energy left and sandwich to kill all zombies
         if (tomb.getTreasure().meets(this)) {
             tomb.setEndOfGame(true);
         }

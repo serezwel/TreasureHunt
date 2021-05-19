@@ -27,6 +27,8 @@ public class ShadowTreasureComplete extends AbstractGame {
     private ArrayList<Zombie> zombie = new ArrayList<Zombie>();
     private Treasure treasure;
     private Bullet bullet;
+    //comparator for sorting distance
+    private DistanceComparator comparator = new DistanceComparator();
 
     // end of game indicator
     private boolean endOfGame;
@@ -105,7 +107,6 @@ public class ShadowTreasureComplete extends AbstractGame {
             e.printStackTrace();
             System.exit(-1);
         }
-        DistanceComparator comparator = new DistanceComparator();
         comparator.setPlayer(player);
         Collections.sort(zombie, comparator);
         Collections.sort(sandwich, comparator);
@@ -117,6 +118,7 @@ public class ShadowTreasureComplete extends AbstractGame {
     @Override
     public void update(Input input) {
         if (this.endOfGame || input.wasPressed(Keys.ESCAPE)){
+            //check if player successfully meets the treasure
             if (treasure.meets(player)) {
                 System.out.println(player.getEnergy() + ", success!");
             } else {
@@ -130,6 +132,8 @@ public class ShadowTreasureComplete extends AbstractGame {
             if (tick > TICK_CYCLE) {
                 // update player status
                 player.update(this);
+                Collections.sort(zombie, comparator);
+                Collections.sort(sandwich, comparator);
                 tick = 1;
                 System.out.println(df.format(player.getPos().x) + "," + df.format(player.getPos().y) + "," + player.getEnergy());
             }
