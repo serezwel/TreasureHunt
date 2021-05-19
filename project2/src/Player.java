@@ -29,7 +29,6 @@ public class Player implements Pointable{
     private double directionX;
     private double directionY;
 
-
     // healthbar parameters
     private int energy;
 
@@ -106,6 +105,7 @@ public class Player implements Pointable{
         if (tomb.getNearestZombie() != null && tomb.getNearestZombie().meets(tomb.getBullet())) {
             tomb.getNearestZombie().setVisible(false);
             tomb.getBullet().setVisible(false);
+
         }
     }
 

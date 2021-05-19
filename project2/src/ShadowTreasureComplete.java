@@ -103,13 +103,11 @@ public class ShadowTreasureComplete extends AbstractGame {
                         throw new BagelError("Unknown type: " + type);
                 }
             }
+            comparator.setPlayer(player);
         } catch (IOException e) {
             e.printStackTrace();
             System.exit(-1);
         }
-        comparator.setPlayer(player);
-        Collections.sort(zombie, comparator);
-        Collections.sort(sandwich, comparator);
     }
 
     /**
@@ -131,9 +129,9 @@ public class ShadowTreasureComplete extends AbstractGame {
             // Update status when the TICK_CYCLE is up
             if (tick > TICK_CYCLE) {
                 // update player status
-                player.update(this);
                 Collections.sort(zombie, comparator);
                 Collections.sort(sandwich, comparator);
+                player.update(this);
                 tick = 1;
                 System.out.println(df.format(player.getPos().x) + "," + df.format(player.getPos().y) + "," + player.getEnergy());
             }
