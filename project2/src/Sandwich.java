@@ -41,7 +41,7 @@ public class Sandwich extends Entity{
         boolean hasMet = false;
 
         if (isVisible()){
-            if (this.getDistance(player) < ShadowTreasureComplete.ClOSENESS) {
+            if (this.getDistance(player) < ShadowTreasureComplete.CLOSENESS) {
                 hasMet = true;
             }
         }

@@ -4,6 +4,7 @@ import java.io.*;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import bagel.util.Point;
 
 /**
  * An example Bagel game.
@@ -11,8 +12,8 @@ import java.util.Collections;
 public class ShadowTreasureComplete extends AbstractGame {
 
     private final Image BACKGROUND = new Image("res/images/background.png");
-    public static final int ClOSENESS = 50;
-    public static final int BULLET_CLOSENESS = 25;
+    public static final double CLOSENESS = 50;
+    public static final double BULLET_CLOSENESS = 25;
 
     // for rounding double number
     private static DecimalFormat df = new DecimalFormat("0.00");
@@ -29,7 +30,7 @@ public class ShadowTreasureComplete extends AbstractGame {
     private Bullet bullet;
     //comparator for sorting distance
     private DistanceComparator comparator = new DistanceComparator();
-
+    private FileWriter csvWriter = new FileWriter("res/IO/output.csv");
     // end of game indicator
     private boolean endOfGame;
 
@@ -58,7 +59,17 @@ public class ShadowTreasureComplete extends AbstractGame {
         }
         return null;
     }
-
+    
+    public void writetoFile(Point point) {
+        try {
+            csvWriter.append(df.format(bullet.getPos().x));
+            csvWriter.append(", ");
+            csvWriter.append(df.format(bullet.getPos().y));
+            csvWriter.append("\n");
+        } catch (IOException e) {
+            System.out.println("Failed to write bullet position");
+        }
+    }
 
     public Sandwich getNearestSandwich() {
         for (int i=0;i<sandwich.size();i++) {
@@ -119,8 +130,20 @@ public class ShadowTreasureComplete extends AbstractGame {
             //check if player successfully meets the treasure
             if (treasure.meets(player)) {
                 System.out.println(player.getEnergy() + ", success!");
+                try {
+                    csvWriter.flush();
+                    csvWriter.close();
+                } catch (IOException e) {
+                    System.out.println("Failed to print output CSV");
+                }
             } else {
                 System.out.println(player.getEnergy());
+                try {
+                    csvWriter.flush();
+                    csvWriter.close();
+                } catch (IOException e) {
+                    System.out.println("Failed to print output CSV");
+                }
             }
             Window.close();
         } else{
@@ -150,6 +173,7 @@ public class ShadowTreasureComplete extends AbstractGame {
             player.render();
             if (bullet.isVisible()){
                 bullet.draw();
+
             }
         }
     }

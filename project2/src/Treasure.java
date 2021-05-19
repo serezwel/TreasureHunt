@@ -15,7 +15,7 @@ public class Treasure {
     public boolean meets(Player player) {
         boolean hasMet = false;
         double distanceToPlayer = player.getPos().distanceTo(pos);
-        if (distanceToPlayer < ShadowTreasureComplete.ClOSENESS) {
+        if (distanceToPlayer < ShadowTreasureComplete.CLOSENESS) {
             hasMet = true;
         }
         return hasMet;

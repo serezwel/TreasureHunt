@@ -5,6 +5,9 @@ import bagel.util.Colour;
 import bagel.util.Point;
 import bagel.util.Vector2;
 
+import java.io.IOException;
+import java.text.DecimalFormat;
+
 public class Player implements Pointable{
 
     // image source file
@@ -20,6 +23,7 @@ public class Player implements Pointable{
     private final Font FONT = new Font("res/font/DejaVuSans-Bold.ttf", 20);
     private final DrawOptions OPT = new DrawOptions();
     private final double SHOOTING_DISTANCE = 150;
+    private static DecimalFormat df = new DecimalFormat("0.00");
 
     // image and type
     private final Image image;
@@ -82,7 +86,7 @@ public class Player implements Pointable{
         } else if (tomb.getNearestZombie() != null) {
             //aim for nearest zombie
             pointTo(tomb.getNearestZombie().getPos());
-            if (pos.distanceTo(tomb.getNearestZombie().getPos()) <= SHOOTING_DISTANCE) {
+            if (pos.distanceTo(tomb.getNearestZombie().getPos()) < SHOOTING_DISTANCE) {
                 //shoot the zombie
                 if (!tomb.getNearestZombie().getIsShot()) {
                     tomb.getNearestZombie().setShot(true);
@@ -99,13 +103,14 @@ public class Player implements Pointable{
         //bullet follows player while invisible, goes to zombie while visible
         if (!tomb.getBullet().isVisible()) { tomb.getBullet().setPos(this.pos); }
         else {
+            tomb.writetoFile(tomb.getBullet().getPos());
             tomb.getBullet().setPos(new Point(tomb.getBullet().getPos().x+BULLET_STEP_SIZE*tomb.getBullet().getDirectionX(),
                     tomb.getBullet().getPos().y+BULLET_STEP_SIZE*tomb.getBullet().getDirectionY()));
         }
         if (tomb.getNearestZombie() != null && tomb.getNearestZombie().meets(tomb.getBullet())) {
+            tomb.writetoFile(tomb.getBullet().getPos());
             tomb.getNearestZombie().setVisible(false);
             tomb.getBullet().setVisible(false);
-
         }
     }
 
