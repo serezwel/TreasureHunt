@@ -81,8 +81,8 @@ public class ShadowTreasureComplete extends AbstractGame {
                 String[] parts = line.split(",");
                 String type = parts[0];
                 type = type.replaceAll("[^a-zA-Z0-9]", ""); // remove special characters
-                int x = Integer.parseInt(parts[1]);
-                int y = Integer.parseInt(parts[2]);
+                double x = Double.parseDouble(parts[1]);
+                double y = Double.parseDouble(parts[2]);
                 switch (type) {
                     case "Player":
                         this.player = new Player(x, y, Integer.parseInt(parts[3]));

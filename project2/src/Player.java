@@ -69,17 +69,17 @@ public class Player implements Pointable{
         // an set the Sandwich to invisible
         if (tomb.getTreasure().meets(this)) {
             tomb.setEndOfGame(true);
-        } else if (tomb.getNearestSandwich().meets(this)) {
-            eatSandwich();
-            tomb.getNearestSandwich().setVisible(false);
+        }
+        if (tomb.getNearestSandwich() == null && tomb.getNearestZombie() != null && this.energy < LOWENERGY) {
+            tomb.setEndOfGame(true);
         }
         // set direction
         if (this.energy < LOWENERGY && tomb.getNearestSandwich() != null) {
             // direction to sandwich
-            try {
-                pointTo(tomb.getNearestSandwich().getPos());
-            } catch (NullPointerException e) {
-                tomb.setEndOfGame(true);
+            pointTo(tomb.getNearestSandwich().getPos());
+            if (tomb.getNearestSandwich().meets(this)) {
+                eatSandwich();
+                tomb.getNearestSandwich().setVisible(false);
             }
         } else if (tomb.getNearestZombie() != null) {
             //aim for nearest zombie
@@ -93,8 +93,6 @@ public class Player implements Pointable{
                 tomb.getBullet().setVisible(true);
                 tomb.getBullet().pointTo(tomb.getNearestZombie().getPos());
             }
-        } else if (this.energy < LOWENERGY) {
-
         } else {
             pointTo(tomb.getTreasure().getPos());
         }
