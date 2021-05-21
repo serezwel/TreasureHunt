@@ -198,8 +198,6 @@ public class ShadowTreasure extends AbstractGame {
                 // update player status
                 Collections.sort(zombie, comparator);
                 Collections.sort(sandwich, comparator);
-                System.out.println(df.format(player.getPos().x) + "," +
-                        df.format(player.getPos().y) + "," + player.getEnergy());
                 player.update(this);
                 tick = 1;
             }
